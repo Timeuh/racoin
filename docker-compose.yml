@@ -1,0 +1,37 @@
+version: '3'
+
+networks:
+  racoin.net:
+    driver: bridge
+
+services:
+  racoin:
+    image: 'canals/php:7.4'
+    ports:
+      - '20392:80'
+    volumes:
+      - ./:/var/www/html
+      - ./:/var/www
+    working_dir: /var/www/
+    networks:
+      - racoin.net
+    depends_on:
+      - bd
+
+  bd:
+    image: 'mariadb:latest'
+    ports:
+      - '20393:3306'
+    env_file:
+      - ./.env
+    networks:
+      - racoin.net
+
+  adminer:
+    image: adminer
+    ports:
+      - '20394:8080'
+    networks:
+      - racoin.net
+
+
